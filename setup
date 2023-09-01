@@ -1,0 +1,48 @@
+sudo vim /etc/pacman.d/mirrorlist
+sudo pacman -Syyu --noconfirm
+sudo pacman -S --noconfirm bitwarden-cli ranger git vim firefox wget tree neofetch base-devel translate-shell newsboat w3m sshfs xdg-utils espeak-ng youtube-dl yt-dlp flatpak mpv glow awk curl htop glances man ffmpeg adobe-source-han-sans-kr-fonts ttf-baekmuk adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts otf-ipafont ttf-hanazono ttf-sazanami ttf-dejavu imagemagick acpi spotifyd python-pip feh fuse gst-plugins-good gst-plugins-bad zsh mupdf
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+cd ~
+pip install ansible homeassistant-cli
+yay -S gomuks otf-ocr-a firefox-extension-bitwarden ytfzf visual-studio-code-bin nerd-fonts-dejavu-complete ttyper
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+cp -v ~/dotfiles/{.vimrc,.zshrc,.e} ~
+chmod +x ~/.e
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+mkdir ~/work ~/work/github ~/work/my-gitea
+git clone http://(insert local address here)/username/hidden-dotfiles.git
+cp -rv ~/hidden-dotfiles/{.newsboat,.ssh,.git*} ~/
+chmod +x ~/.newsboat/bookmark.sh
+sudo rm -rv ~/.ssh/public
+chmod 600 ~/.ssh/*
+sudo rm -rv ~/Desktop ~/Documents ~/Templates ~/Downloads ~/Music ~/Public ~/Videos ~/yay ~/hidden-dotfiles ~/F-Droid.apk
+xdg-mime default mupdf.desktop application/pdf
+
+timedatectl set-timezone (insert Area/City here)
+nmcli c add type gsm ifname "$(nmcli d | grep -m 1 "gsm" | cut -d' ' -f1)" con-name "Eir" apn "data.myeirmobile.ie"
+sudo pacman -S --noconfirm waydroid-image bluez bluez-utils ppkb-tools python-pyqt5 python-pyqtwebengine
+yay -S mobile-config-firefox
+sudo waydroid init -f
+sudo systemctl enable --now waydroid-container
+cp -rv ~/dotfiles/pinephone/{ytfzf,foot} ~/.config/
+sudo rm -rv ~/.config/sxmo/sway
+cp -rv ~/dotfiles/pinephone/sxmo/* ~/.config/sxmo/
+chmod +x ~/.config/sxmo/userscripts/*
+chmod +x ~/.config/sxmo/hook/*
+sudo rm -v ~/.config/sxmo/contacts.tsv
+cp -v ~/hidden-dotfiles/contacts.tsv ~/.config/sxmo/contacts.tsv
+wget https://f-droid.org/F-Droid.apk
+waydroid session start & sleep 180 && waydroid app install ~/F-Droid.apk
+sudo rm -v /usr/share/sxmo/appscripts/{sxmo_reddit.sh,sxmo_rss.sh,sxmo_weather.sh,sxmo_youtube.sh,sxmo_youtube_audio.sh}
+mkdir ~/notes
+wget https://github.com/infinyte7/anki-arm64/releases/download/v0.0.1-archarm/aqt-2.1.47-py3-none-any.whl
+wget https://github.com/infinyte7/anki-arm64/releases/download/v0.0.1-archarm/anki-2.1.47-cp38-abi3-manylinux2014_aarch64.whl
+pip install anki-2.1.47-cp38-abi3-manylinux2014_aarch64.whl
+pip install aqt-2.1.47-py3-none-any.whl
+passwd
+sudo vim /etc/hostname
+sxmo_migrate.sh

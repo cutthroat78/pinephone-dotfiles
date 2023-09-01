@@ -1,0 +1,145 @@
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+# Your preferred terminal emulator
+set $term sxmo_terminal.sh
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+set $menu bemenu-run
+
+exec_always sxmo_swayinitconf.sh
+
+mode "menu" {
+    bindsym --input-device=1:1:1c21800.lradc XF86AudioMute exec nothing # just a placeholder for "menu" mode
+}
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+t exec $term
+
+    # Launch sys menu
+    bindsym $mod+d exec sxmo_appmenu.sh sys
+    
+    # Launch appmenu
+    bindsym $mod+Shift+d exec sxmo_appmenu.sh
+    
+    # Launch scripts menu
+    bindsym $mod+Control+d exec sxmo_appmenu.sh scripts
+    
+    # Rotate
+    bindsym $mod+k exec sxmo_rotate.sh
+    
+    # Firefox
+    bindsym $mod+z exec firefox
+
+    # Kill focused window
+    bindsym $mod+p kill
+
+    # Start your launcher
+    bindsym $mod+Mod1+d exec $menu
+
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+
+#
+# Layout stuff:
+#
+    # Toggle between horizontal and vertical split
+    bindsym $mod+space layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+w floating toggle
+
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+
+# Resizing containers:
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $mod+Control+Left resize shrink width 10px
+    bindsym $mod+Control+Down resize grow height 10px
+    bindsym $mod+Control+Up resize shrink height 10px
+    bindsym $mod+Control+Right resize grow width 10px
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    position top
+
+    # When the status_command prints a new line to stdout, swaybar updates.
+    # The default just shows the current date and time.
+    status_command sxmo_status.sh watch
+
+    workspace_buttons no
+
+    colors {
+        statusline #ffffff
+        background #000000
+        inactive_workspace #32323200 #32323200 #5c5c5c
+        font "OCRA"
+    }
+}
+
+for_window [app_id="foot" title=".*sxmo/modem/.*/draft.txt.*"] resize set height 25
+for_window [title="megapixels"] inhibit_idle open
+
+default_border pixel 3
+titlebar_border_thickness 3
+hide_edge_borders smart
+
+include /etc/sway/config.d/*
+
+exec 'printf %s "$SWAYSOCK" > "$XDG_RUNTIME_DIR"/sxmo.swaysock'
+
+output * bg #000000 solid_color
+
+exec sxmo_hook_start.sh
